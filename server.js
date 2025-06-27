@@ -73,8 +73,8 @@ app.get("/", (req, res) => {
     // 이곳에 코드를 작성하세요.
 
     return res.send({
-      userName: userInfo.user_name,
-      userInfo: userInfo.user_info,
+      user_name: userInfo.user_name,
+      user_info: userInfo.user_info,
     });
   } catch (err) {
     return res.status(403).send("토큰 유효하지 않음");
