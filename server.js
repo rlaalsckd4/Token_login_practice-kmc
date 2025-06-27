@@ -39,7 +39,7 @@ app.post("/", (req, res) => {
   } else {
     // 1. 유저정보가 있는 경우 accessToken을 발급하는 로직을 작성하세요.(sign)
     // 이곳에 코드를 작성하세요.
-    const accessToken = jwt.sign({ userId: userInfo.user_id }, secretKey, {
+    const accessToken = jwt.sign({ user_id: userInfo.user_id }, secretKey, {
       expiresIn: 60 * 10,
     });
     // 2. 응답으로 accessToken을 클라이언트로 전송하세요. (res.send 사용)
@@ -63,7 +63,7 @@ app.get("/", (req, res) => {
   try {
     const decoded = jwt.verify(accessToken, secretKey);
 
-    const userInfo = users.find((el) => el.user_id === decoded.userId);
+    const userInfo = users.find((el) => el.user_id === decoded.user_id);
 
     if (!userInfo) {
       return res.status(404).send("유저 정보 없음");
