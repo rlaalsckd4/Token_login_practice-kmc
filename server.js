@@ -52,8 +52,33 @@ app.post("/", (req, res) => {
 app.get("/", (req, res) => {
   // 3. req headers에 담겨있는 accessToken을 검증하는 로직을 작성하세요.(verify)
   // 이곳에 코드를 작성하세요.
-  // 4. 검증이 완료되면 유저정보를 클라이언트로 전송하세요.(res.send 사용)
-  // 이곳에 코드를 작성하세요.
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).send("토큰 없음 또는 형식 오류");
+  }
+
+  const accessToken = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(accessToken, secretKey);
+
+    const userInfo = users.find((el) => el.user_id === decoded.userId);
+
+    if (!userInfo) {
+      return res.status(404).send("유저 정보 없음");
+    }
+
+    // 4. 검증이 완료되면 유저정보를 클라이언트로 전송하세요.(res.send 사용)
+    // 이곳에 코드를 작성하세요.
+
+    return res.send({
+      userName: userInfo.user_name,
+      userInfo: userInfo.user_info,
+    });
+  } catch (err) {
+    return res.status(403).send("토큰 유효하지 않음");
+  }
 });
 
 app.listen(3000, () => console.log("서버 실행!"));
